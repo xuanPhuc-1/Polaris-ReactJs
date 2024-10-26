@@ -12,7 +12,6 @@ import {
 	Card,
 	Popover
 } from "@shopify/polaris";
-import { TitleBar } from "@shopify/app-bridge-react";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { faker } from "@faker-js/faker";
@@ -23,6 +22,7 @@ import AddProductModal from "./AddProductForm";
 import AddRuleModal from "./AddRuleForm";
 import { Space } from "antd";
 import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
+import { Col, Row } from "antd";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -155,58 +155,32 @@ export default function ProductsPage() {
 		<AppProvider i18n={enTranslations}>
 			<Page fullWidth title="Products">
 				<>
-					<div
-						style={{
-							display: "flex",
-							justifyContent: "space-between",
-							alignItems: "center",
-							marginBottom: "20px"
-						}}
-					>
-						<TitleBar title="Products" />
-						<Button variant="primary" onClick={() => setIsOpenModal(true)}>
-							Add product
-						</Button>
-					</div>
-					<div style={{ marginBottom: "20px" }}>
-						<TextField
-							label="Filter by Title"
-							value={filterTitle}
-							onChange={value => setFilterTitle(value)}
-							placeholder="Enter product title"
-							autoComplete="off"
-						/>
-						<Select
-							label="Filter by Status"
-							options={["All", "Active", "No rule"]}
-							onChange={value => setFilterStatus(value)}
-							value={filterStatus}
-						/>
-					</div>
-
-					<div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
-						<Select
-							label="Items per Page"
-							options={[5, 10, 15, 20].map(number => ({
-								label: `${number}`,
-								value: number.toString()
-							}))}
-							onChange={value => {
-								setItemsPerPage(Number(value));
-								setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số mục hiển thị
-							}}
-							value={itemsPerPage.toString()}
-						/>
-						<Select
-							label="Select Page"
-							options={Array.from({ length: totalPages }, (_, i) => ({
-								label: `Page ${i + 1}`,
-								value: (i + 1).toString()
-							}))}
-							onChange={value => setCurrentPage(Number(value))}
-							value={currentPage.toString()}
-						/>
-					</div>
+					<Row style={{ display: "flex", marginBottom: "20px", alignItems: "center", justifyContent: "space-between" }}>
+						<Row style={{ display: "flex", alignItems: "center" }} gutter={16}>
+							<Col span={12}>
+								<Select
+									label="Filter by Status"
+									options={["All", "Active", "No rule"]}
+									onChange={value => setFilterStatus(value)}
+									value={filterStatus}
+								/>
+							</Col>
+							<Col span={12}>
+								<TextField
+									label="Filter by Title"
+									value={filterTitle}
+									onChange={value => setFilterTitle(value)}
+									placeholder="Enter product title"
+									autoComplete="off"
+								/>
+							</Col>
+						</Row>
+						<Col span={6} style={{ display: "flex", justifyContent: "flex-end" }}>
+							<Button onClick={() => setIsOpenModal(true)} variant="primary">
+								Add Product
+							</Button>
+						</Col>
+					</Row>
 
 					<div style={{ width: "100%" }}>
 						<IndexTable
@@ -225,13 +199,42 @@ export default function ProductsPage() {
 						>
 							{rowMarkup}
 						</IndexTable>
+						<Row style={{ display: "flex", justifyContent: "flex-end" }}>
+							<Col span={12}>
+								<Row style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<Pagination
+										hasPrevious={currentPage > 1}
+										hasNext={currentPage < totalPages}
+										onPrevious={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+										onNext={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+									/>
+									<div style={{ display: "flex" }}>
+										<Select
+											label="Items per Page"
+											options={[5, 10, 15, 20].map(number => ({
+												label: `${number}`,
+												value: number.toString()
+											}))}
+											onChange={value => {
+												setItemsPerPage(Number(value));
+												setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số mục hiển thị
+											}}
+											value={itemsPerPage.toString()}
+										/>
+										<Select
+											label="Select Page"
+											options={Array.from({ length: totalPages }, (_, i) => ({
+												label: `Page ${i + 1}`,
+												value: (i + 1).toString()
+											}))}
+											onChange={value => setCurrentPage(Number(value))}
+											value={currentPage.toString()}
+										/>
+									</div>
+								</Row>
+							</Col>
+						</Row>
 
-						<Pagination
-							hasPrevious={currentPage > 1}
-							hasNext={currentPage < totalPages}
-							onPrevious={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-							onNext={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-						/>
 						{isOpenModal && (
 							<AddProductModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} onSubmit={handleProductSubmit} />
 						)}
