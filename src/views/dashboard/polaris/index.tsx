@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Page, Grid, LegacyCard, AppProvider, Button, Text, Box, Layout, Popover, DatePicker } from "@shopify/polaris";
+import { Page, Grid, LegacyCard, AppProvider, Button, Text, Box, Layout, DatePicker } from "@shopify/polaris";
 import { Line as LineChart, Bar as ColumnChart } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from "chart.js";
 import enTranslations from "@shopify/polaris/locales/en.json";
@@ -21,7 +21,6 @@ export default function DashboardPage() {
 		end: new Date()
 	});
 
-	const [popoverActive, setPopoverActive] = useState<boolean>(false);
 	const [month, setMonth] = useState<number>(new Date().getMonth());
 	const [year, setYear] = useState<number>(new Date().getFullYear());
 	const [totalSubscriptions, setTotalSubscriptions] = useState<number>(0);
@@ -32,8 +31,6 @@ export default function DashboardPage() {
 	const [columnChartFilteredData, setColumnChartFilteredData] = useState<number[]>([
 		5000, 6000, 5500, 7000, 6500, 7200, 7500, 8000, 7800, 8300, 8500, 9000
 	]);
-
-	const togglePopover = (): void => setPopoverActive(!popoverActive);
 
 	const handleDateChange = (value: DateRange): void => {
 		setSelectedDates(value);
@@ -175,39 +172,61 @@ export default function DashboardPage() {
 		filterRevenue(selectedDates.start, selectedDates.end);
 	}, [selectedDates]);
 
+	const handleOnFilter = () => {
+		filterSubscriptions(selectedDates.start, selectedDates.end);
+		filterRevenue(selectedDates.start, selectedDates.end);
+	};
+
 	return (
 		<AppProvider i18n={enTranslations}>
 			<Page fullWidth title="Dashboard">
-				<Layout.Section>
-					<LegacyCard sectioned>
-						<Popover
-							active={popoverActive}
-							activator={
-								<Button onClick={togglePopover} icon="calendar">
-									{`${selectedDates.start.toDateString()} - ${selectedDates.end.toDateString()}`}
-								</Button>
-							}
-							onClose={togglePopover}
-						>
+				<Layout>
+					<Layout.Section>
+						<Box padding="400" borderColor="border" borderWidth="025">
+							<DatePicker
+								month={month}
+								year={year}
+								onChange={handleDateChange}
+								onMonthChange={handleMonthChange}
+								selected={selectedDates}
+								allowRange
+							/>
+						</Box>
+					</Layout.Section>
+
+					<div className="preset-filter" style={{ display: "flex", justifyContent: "flex-start" }}>
+						<Layout.Section variant="oneThird">
 							<Box padding="400">
-								<DatePicker
-									month={month}
-									year={year}
-									onChange={handleDateChange}
-									onMonthChange={handleMonthChange}
-									selected={selectedDates}
-									allowRange
-								/>
+								<Space direction="vertical" size="middle">
+									<Button onClick={setYesterday} fullWidth>
+										Yesterday
+									</Button>
+									<Button onClick={setLast7Days} fullWidth>
+										7 days
+									</Button>
+									<Button onClick={setLastMonth} fullWidth>
+										Last month
+									</Button>
+									<Button onClick={setThisYear} fullWidth>
+										This year
+									</Button>
+								</Space>
 							</Box>
-						</Popover>
+						</Layout.Section>
+					</div>
+				</Layout>
+
+				<Layout.Section>
+					<div className="filter-action-buttons" style={{ display: "flex", justifyContent: "flex-end" }}>
 						<Space>
-							<Button onClick={setYesterday}>Ngày hôm qua</Button>
-							<Button onClick={setLast7Days}>7 ngày gần nhất</Button>
-							<Button onClick={setLastMonth}>Tháng trước</Button>
-							<Button onClick={setThisYear}>Năm nay</Button>
-							<Button onClick={resetDates}>Reset</Button>
+							<Button onClick={resetDates} fullWidth variant="primary" tone="critical">
+								Reset
+							</Button>
+							<Button fullWidth variant="primary" onClick={handleOnFilter}>
+								Filter
+							</Button>
 						</Space>
-					</LegacyCard>
+					</div>
 				</Layout.Section>
 
 				<Layout.Section>
