@@ -8,6 +8,7 @@ import useTheme from "@/hooks/useTheme";
 import enUS from "antd/lib/locale/en_US";
 import i18n from "i18next";
 import { BrowserRouter } from "react-router-dom";
+import "@shopify/polaris/build/esm/styles.css";
 
 const App = (props: any) => {
 	const { language, assemblySize, themeConfig, setLanguage } = props;
