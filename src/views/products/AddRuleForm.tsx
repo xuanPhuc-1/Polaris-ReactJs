@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import { Modal, TextField, Button, FormLayout } from "@shopify/polaris";
 import { DeleteIcon } from "@shopify/polaris-icons";
-
-interface Rule {
-	buyFrom: string;
-	buyTo: string;
-	discount: string;
-}
+import { Rule } from "@/api/interface/product";
+import { message } from "antd";
 
 interface AddRuleModalProps {
 	isOpen: boolean;
@@ -39,17 +35,22 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 			newErrors.endDate = "End date must be after Start date";
 		}
 
-		rules.forEach((rule, index) => {
-			if (!rule.buyFrom || parseFloat(rule.buyFrom) <= 0) {
-				newErrors[`buyFrom-${index}`] = "Buy from must be a positive number";
-			}
-			if (!rule.buyTo || parseFloat(rule.buyTo) <= parseFloat(rule.buyFrom)) {
-				newErrors[`buyTo-${index}`] = "Buy to must be greater than Buy from";
-			}
-			if (!rule.discount || parseFloat(rule.discount) <= 0) {
-				newErrors[`discount-${index}`] = "Discount must be a positive percentage";
-			}
-		});
+		if (rules.length === 0) {
+			newErrors.rules = "At least one rule is required";
+			message.error("At least one rule is required");
+		} else {
+			rules.forEach((rule, index) => {
+				if (!rule.buyFrom || parseFloat(rule.buyFrom) <= 0) {
+					newErrors[`buyFrom-${index}`] = "Buy from must be a positive number";
+				}
+				if (!rule.buyTo || parseFloat(rule.buyTo) <= parseFloat(rule.buyFrom)) {
+					newErrors[`buyTo-${index}`] = "Buy to must be greater than Buy from";
+				}
+				if (!rule.discount || parseFloat(rule.discount) <= 0) {
+					newErrors[`discount-${index}`] = "Discount must be a positive percentage";
+				}
+			});
+		}
 
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
