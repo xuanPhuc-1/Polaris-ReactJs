@@ -5,6 +5,7 @@ import { Line as LineChart, Bar as ColumnChart } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from "chart.js";
 import enTranslations from "@shopify/polaris/locales/en.json";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
+import { Space } from "antd";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement);
@@ -124,6 +125,13 @@ export default function DashboardPage() {
 		setSelectedDates({ start: firstDayOfLastMonth, end: lastDayOfLastMonth });
 	};
 
+	const setThisYear = () => {
+		const today = new Date();
+		const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+		const lastDayOfYear = new Date(today.getFullYear(), 11, 31);
+		setSelectedDates({ start: firstDayOfYear, end: lastDayOfYear });
+	};
+
 	const resetDates = () => {
 		setSelectedDates({ start: new Date(), end: new Date() });
 	};
@@ -192,10 +200,13 @@ export default function DashboardPage() {
 								/>
 							</Box>
 						</Popover>
-						<Button onClick={setYesterday}>Ngày hôm qua</Button>
-						<Button onClick={setLast7Days}>7 ngày gần nhất</Button>
-						<Button onClick={setLastMonth}>Tháng trước</Button>
-						<Button onClick={resetDates}>Reset</Button>
+						<Space>
+							<Button onClick={setYesterday}>Ngày hôm qua</Button>
+							<Button onClick={setLast7Days}>7 ngày gần nhất</Button>
+							<Button onClick={setLastMonth}>Tháng trước</Button>
+							<Button onClick={setThisYear}>Năm nay</Button>
+							<Button onClick={resetDates}>Reset</Button>
+						</Space>
 					</LegacyCard>
 				</Layout.Section>
 
