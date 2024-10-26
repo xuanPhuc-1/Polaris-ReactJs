@@ -209,27 +209,29 @@ export default function ProductsPage() {
 										onNext={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
 									/>
 									<div style={{ display: "flex" }}>
-										<Select
-											label="Items per Page"
-											options={[5, 10, 15, 20].map(number => ({
-												label: `${number}`,
-												value: number.toString()
-											}))}
-											onChange={value => {
-												setItemsPerPage(Number(value));
-												setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số mục hiển thị
-											}}
-											value={itemsPerPage.toString()}
-										/>
-										<Select
-											label="Select Page"
-											options={Array.from({ length: totalPages }, (_, i) => ({
-												label: `Page ${i + 1}`,
-												value: (i + 1).toString()
-											}))}
-											onChange={value => setCurrentPage(Number(value))}
-											value={currentPage.toString()}
-										/>
+										<Space>
+											<Select
+												label="Item/Page"
+												options={[5, 10, 15, 20].map(number => ({
+													label: `${number}`,
+													value: number.toString()
+												}))}
+												onChange={value => {
+													setItemsPerPage(Number(value));
+													setCurrentPage(1); // Reset về trang đầu tiên khi thay đổi số mục hiển thị
+												}}
+												value={itemsPerPage.toString()}
+											/>
+											<Select
+												label="Select Page"
+												options={Array.from({ length: totalPages }, (_, i) => ({
+													label: `Page ${i + 1}`,
+													value: (i + 1).toString()
+												}))}
+												onChange={value => setCurrentPage(Number(value))}
+												value={currentPage.toString()}
+											/>
+										</Space>
 									</div>
 								</Row>
 							</Col>

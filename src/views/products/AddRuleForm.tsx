@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, TextField, Button, FormLayout } from "@shopify/polaris";
 import { DeleteIcon } from "@shopify/polaris-icons";
 import { Rule } from "@/api/interface/product";
-import { message } from "antd";
+import { Col, message, Row } from "antd";
 
 interface AddRuleModalProps {
 	isOpen: boolean;
@@ -119,44 +119,54 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 					</FormLayout.Group>
 
 					{rules.map((rule, index) => (
-						<FormLayout.Group condensed key={index}>
-							<TextField
-								label="Buy from"
-								type="number"
-								value={rule.buyFrom}
-								onChange={value => {
-									const newRules = [...rules];
-									newRules[index].buyFrom = value;
-									setRules(newRules);
-								}}
-								autoComplete="off"
-								error={errors[`buyFrom-${index}`]}
-							/>
-							<TextField
-								label="Buy to"
-								type="number"
-								value={rule.buyTo}
-								onChange={value => {
-									const newRules = [...rules];
-									newRules[index].buyTo = value;
-									setRules(newRules);
-								}}
-								autoComplete="off"
-								error={errors[`buyTo-${index}`]}
-							/>
-							<TextField
-								label="Discount per item(%)"
-								type="number"
-								value={rule.discount}
-								onChange={value => {
-									const newRules = [...rules];
-									newRules[index].discount = value;
-									setRules(newRules);
-								}}
-								autoComplete="off"
-								error={errors[`discount-${index}`]}
-							/>
-							<div style={{ display: "flex", alignItems: "center", marginTop: "1.6rem" }}>
+						<Row
+							key={index}
+							gutter={16}
+							style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #f0f0f0", padding: "10px 0" }}
+						>
+							<Col span={6}>
+								<TextField
+									label="Buy from"
+									type="number"
+									value={rule.buyFrom}
+									onChange={value => {
+										const newRules = [...rules];
+										newRules[index].buyFrom = value;
+										setRules(newRules);
+									}}
+									autoComplete="off"
+									error={errors[`buyFrom-${index}`]}
+								/>
+							</Col>
+							<Col span={6}>
+								<TextField
+									label="Buy to"
+									type="number"
+									value={rule.buyTo}
+									onChange={value => {
+										const newRules = [...rules];
+										newRules[index].buyTo = value;
+										setRules(newRules);
+									}}
+									autoComplete="off"
+									error={errors[`buyTo-${index}`]}
+								/>
+							</Col>
+							<Col span={6}>
+								<TextField
+									label="Discount per item(%)"
+									type="number"
+									value={rule.discount}
+									onChange={value => {
+										const newRules = [...rules];
+										newRules[index].discount = value;
+										setRules(newRules);
+									}}
+									autoComplete="off"
+									error={errors[`discount-${index}`]}
+								/>
+							</Col>
+							<Col span={6} style={{ display: "flex", justifyContent: "flex-end" }}>
 								<Button
 									icon={DeleteIcon}
 									accessibilityLabel="Remove rule"
@@ -164,8 +174,8 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 									variant="plain"
 									tone="critical"
 								/>
-							</div>
-						</FormLayout.Group>
+							</Col>
+						</Row>
 					))}
 
 					<div style={{ display: "flex", justifyContent: "flex-start", paddingTop: "10px" }}>
