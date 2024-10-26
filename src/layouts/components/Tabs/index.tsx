@@ -1,4 +1,4 @@
-import { Tabs, message } from "antd";
+import { Tabs } from "antd";
 import { HomeFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -50,7 +50,6 @@ const LayoutTabs = (props: any) => {
 				navigate(nextTab.path);
 			});
 		}
-		message.success("You deleted a tab 😆😆😆");
 		setTabsList(tabsList.filter((item: Menu.MenuOptions) => item.path !== tabPath));
 	};
 
