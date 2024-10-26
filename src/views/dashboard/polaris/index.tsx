@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Page, Grid, LegacyCard, AppProvider, Button, Text, Box, Layout, DatePicker } from "@shopify/polaris";
+import { Page, Grid, LegacyCard, AppProvider, Button, Text, Layout, DatePicker } from "@shopify/polaris";
 import { Line as LineChart, Bar as ColumnChart } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from "chart.js";
 import enTranslations from "@shopify/polaris/locales/en.json";
@@ -185,15 +185,15 @@ export default function DashboardPage() {
 			<Page fullWidth>
 				<Layout>
 					<Layout.Section>
-						<Space>
-							<Text variant="bodyMd" as="p">
-								Start Date: {selectedDates.start.toLocaleDateString()}
-							</Text>
-							<Text variant="bodyMd" as="p">
-								End Date: {selectedDates.end.toLocaleDateString()}
-							</Text>
-						</Space>
-						<Box padding="400" borderColor="border" borderWidth="025">
+						<LegacyCard sectioned>
+							<Space>
+								<Text variant="bodyMd" as="p">
+									Start Date: {selectedDates.start.toLocaleDateString()}
+								</Text>
+								<Text variant="bodyMd" as="p">
+									End Date: {selectedDates.end.toLocaleDateString()}
+								</Text>
+							</Space>
 							<DatePicker
 								month={month}
 								year={year}
@@ -202,12 +202,12 @@ export default function DashboardPage() {
 								selected={selectedDates}
 								allowRange
 							/>
-						</Box>
+						</LegacyCard>
 					</Layout.Section>
 
 					<div className="preset-filter" style={{ display: "flex", justifyContent: "flex-start" }}>
 						<Layout.Section variant="oneThird">
-							<Box padding="400">
+							<LegacyCard sectioned>
 								<Space direction="vertical" size="middle">
 									<Button onClick={setYesterday} fullWidth>
 										Yesterday
@@ -221,48 +221,39 @@ export default function DashboardPage() {
 									<Button onClick={setThisYear} fullWidth>
 										This year
 									</Button>
+									<Button onClick={resetDates} fullWidth variant="primary" tone="critical">
+										Reset
+									</Button>
+									<Button fullWidth variant="primary" onClick={handleOnFilter} tone="success">
+										Filter
+									</Button>
 								</Space>
-							</Box>
+							</LegacyCard>
 						</Layout.Section>
 					</div>
+					<Layout.Section variant="fullWidth">
+						<Grid>
+							<Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+								<LegacyCard title="Subscriptions (Last 7 days)" sectioned>
+									<Text variant="bodyMd" as="span">
+										Total Subscriptions: {totalSubscriptions}
+									</Text>
+									<LineChart data={lineData} />
+								</LegacyCard>
+							</Grid.Cell>
+
+							{/* Revenue Chart */}
+							<Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
+								<LegacyCard title="Revenue (This year)" sectioned>
+									<Text variant="bodyMd" as="span">
+										Total Revenue: {totalRevenue}
+									</Text>
+									<ColumnChart data={columnChartData} />
+								</LegacyCard>
+							</Grid.Cell>
+						</Grid>
+					</Layout.Section>
 				</Layout>
-
-				<Layout.Section>
-					<div className="filter-action-buttons" style={{ display: "flex", justifyContent: "flex-end" }}>
-						<Space>
-							<Button onClick={resetDates} fullWidth variant="primary" tone="critical">
-								Reset
-							</Button>
-							<Button fullWidth variant="primary" onClick={handleOnFilter}>
-								Filter
-							</Button>
-						</Space>
-					</div>
-				</Layout.Section>
-
-				<Layout.Section>
-					<Grid>
-						{/* Subscriptions Chart */}
-						<Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-							<LegacyCard title="Subscriptions (Last 7 days)" sectioned>
-								<Text variant="bodyMd" as="span">
-									Total Subscriptions: {totalSubscriptions}
-								</Text>
-								<LineChart data={lineData} />
-							</LegacyCard>
-						</Grid.Cell>
-
-						{/* Revenue Chart */}
-						<Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-							<LegacyCard title="Revenue (This year)" sectioned>
-								<Text variant="bodyMd" as="span">
-									Total Revenue: {totalRevenue}
-								</Text>
-								<ColumnChart data={columnChartData} />
-							</LegacyCard>
-						</Grid.Cell>
-					</Grid>
-				</Layout.Section>
 			</Page>
 		</AppProvider>
 	);
