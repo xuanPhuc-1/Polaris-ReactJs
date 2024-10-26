@@ -95,7 +95,7 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 							onChange={value => setTitle(value)}
 							autoComplete="off"
 							error={errors.title}
-							// Set width
+							requiredIndicator
 						/>
 					</FormLayout.Group>
 					<FormLayout.Group>
@@ -106,6 +106,7 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 							onChange={value => setStartDate(value)}
 							autoComplete="off"
 							error={errors.startDate}
+							requiredIndicator
 						/>
 						<TextField
 							label="End date"
@@ -114,16 +115,12 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 							onChange={value => setEndDate(value)}
 							autoComplete="off"
 							error={errors.endDate}
-							// Set width
+							requiredIndicator
 						/>
 					</FormLayout.Group>
 
 					{rules.map((rule, index) => (
-						<Row
-							key={index}
-							gutter={16}
-							style={{ display: "flex", alignItems: "center", borderBottom: "1px solid #f0f0f0", padding: "10px 0" }}
-						>
+						<Row key={index} gutter={16} style={{ display: "flex", borderBottom: "1px solid #f0f0f0", padding: "10px 0" }}>
 							<Col span={6}>
 								<TextField
 									label="Buy from"
@@ -136,6 +133,7 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 									}}
 									autoComplete="off"
 									error={errors[`buyFrom-${index}`]}
+									requiredIndicator
 								/>
 							</Col>
 							<Col span={6}>
@@ -150,6 +148,7 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 									}}
 									autoComplete="off"
 									error={errors[`buyTo-${index}`]}
+									requiredIndicator
 								/>
 							</Col>
 							<Col span={6}>
@@ -164,6 +163,7 @@ const AddRuleModal = ({ isOpen, onClose, onSubmit }: AddRuleModalProps) => {
 									}}
 									autoComplete="off"
 									error={errors[`discount-${index}`]}
+									requiredIndicator
 								/>
 							</Col>
 							<Col span={6} style={{ display: "flex", justifyContent: "flex-end" }}>

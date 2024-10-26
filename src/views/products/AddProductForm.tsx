@@ -23,8 +23,9 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 	const [endDate, setEndDate] = useState("");
 	const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-	const handleDropZoneDrop = (files: File[]) => {
-		setFiles(files);
+	const handleDropZoneDrop = (acceptedFiles: File[]) => {
+		const imageFiles = acceptedFiles.filter(file => file.type.startsWith("image/"));
+		setFiles(imageFiles);
 	};
 
 	const validateFields = () => {
@@ -92,7 +93,14 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 		>
 			<Modal.Section>
 				<BlockStack>
-					<TextField label="Title" value={title} onChange={value => setTitle(value)} autoComplete="off" error={errors.title} />
+					<TextField
+						label="Title"
+						value={title}
+						onChange={value => setTitle(value)}
+						autoComplete="off"
+						error={errors.title}
+						requiredIndicator
+					/>
 					<TextField
 						label="Price"
 						type="number"
@@ -101,6 +109,7 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 						prefix="$"
 						autoComplete="off"
 						error={errors.price}
+						requiredIndicator
 					/>
 					<TextField
 						label="Buy from"
@@ -109,6 +118,7 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 						onChange={value => setBuyFrom(value)}
 						autoComplete="off"
 						error={errors.buyFrom}
+						requiredIndicator
 					/>
 					<TextField
 						label="Buy to"
@@ -117,6 +127,7 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 						onChange={value => setBuyTo(value)}
 						autoComplete="off"
 						error={errors.buyTo}
+						requiredIndicator
 					/>
 					<TextField
 						label="Start date"
@@ -125,6 +136,7 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 						onChange={value => setStartDate(value)}
 						autoComplete="off"
 						error={errors.startDate}
+						requiredIndicator
 					/>
 					<TextField
 						label="End date"
@@ -133,6 +145,7 @@ const AddProductModal = ({ isOpen, onClose, onSubmit }: AddProductModalProps) =>
 						onChange={value => setEndDate(value)}
 						autoComplete="off"
 						error={errors.endDate}
+						requiredIndicator
 					/>
 					<DropZone accept="image/*" type="image" onDrop={handleDropZoneDrop} label="Image">
 						{uploadedFiles}
