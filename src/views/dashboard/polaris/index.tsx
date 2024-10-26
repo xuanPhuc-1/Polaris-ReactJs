@@ -17,8 +17,8 @@ interface DateRange {
 
 export default function DashboardPage() {
 	const [selectedDates, setSelectedDates] = useState<DateRange>({
-		start: new Date(),
-		end: new Date()
+		start: new Date(new Date().getFullYear(), 0, 1), // Ngày 1 tháng 1
+		end: new Date(new Date().getFullYear(), 11, 31) // Ngày 31 tháng 12
 	});
 
 	const [month, setMonth] = useState<number>(new Date().getMonth());
@@ -130,7 +130,10 @@ export default function DashboardPage() {
 	};
 
 	const resetDates = () => {
-		setSelectedDates({ start: new Date(), end: new Date() });
+		setSelectedDates({
+			start: new Date(new Date().getFullYear(), 0, 1),
+			end: new Date(new Date().getFullYear(), 11, 31)
+		});
 	};
 
 	const filterSubscriptions = (startDate: Date, endDate: Date): void => {
@@ -179,9 +182,17 @@ export default function DashboardPage() {
 
 	return (
 		<AppProvider i18n={enTranslations}>
-			<Page fullWidth title="Dashboard">
+			<Page fullWidth>
 				<Layout>
 					<Layout.Section>
+						<Space>
+							<Text variant="bodyMd" as="p">
+								Start Date: {selectedDates.start.toLocaleDateString()}
+							</Text>
+							<Text variant="bodyMd" as="p">
+								End Date: {selectedDates.end.toLocaleDateString()}
+							</Text>
+						</Space>
 						<Box padding="400" borderColor="border" borderWidth="025">
 							<DatePicker
 								month={month}
@@ -233,7 +244,7 @@ export default function DashboardPage() {
 					<Grid>
 						{/* Subscriptions Chart */}
 						<Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-							<LegacyCard title="Subscriptions" sectioned>
+							<LegacyCard title="Subscriptions (Last 7 days)" sectioned>
 								<Text variant="bodyMd" as="span">
 									Total Subscriptions: {totalSubscriptions}
 								</Text>
@@ -243,7 +254,7 @@ export default function DashboardPage() {
 
 						{/* Revenue Chart */}
 						<Grid.Cell columnSpan={{ xs: 6, sm: 6, md: 6, lg: 6, xl: 6 }}>
-							<LegacyCard title="Revenue" sectioned>
+							<LegacyCard title="Revenue (This year)" sectioned>
 								<Text variant="bodyMd" as="span">
 									Total Revenue: {totalRevenue}
 								</Text>
