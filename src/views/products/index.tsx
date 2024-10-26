@@ -20,6 +20,9 @@ import enTranslations from "@shopify/polaris/locales/en.json";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import type { Product } from "@/api/interface/product";
 import AddProductModal from "./AddProductForm";
+import AddRuleModal from "./AddRuleForm";
+import { Space } from "antd";
+import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -35,6 +38,7 @@ export default function ProductsPage() {
 	const [filterTitle, setFilterTitle] = useState("");
 	const [filterStatus, setFilterStatus] = useState("All");
 	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [isAddRuleModalOpen, setIsAddRuleModalOpen] = useState(false);
 
 	const fetchProducts = async () => {
 		try {
@@ -103,6 +107,11 @@ export default function ProductsPage() {
 		setIsOpenModal(false);
 	};
 
+	const handleAddRuleSubmit = (ruleData: any) => {
+		console.log("Rule Data:", ruleData);
+		setIsAddRuleModalOpen(false);
+	};
+
 	const { selectedResources, allResourcesSelected, handleSelectionChange } = useIndexResourceState(products);
 
 	const rowMarkup = currentProducts.map(({ id, product, rules, lastUpdate, status, image }, index) => (
@@ -130,9 +139,14 @@ export default function ProductsPage() {
 				<Badge tone={status === "Active" ? "success" : "critical"}>{status}</Badge>
 			</IndexTable.Cell>
 			<IndexTable.Cell>
-				<Button variant="primary" onClick={() => openPopover(rules)}>
-					Add Rule
-				</Button>
+				<Space>
+					<Button icon={SearchIcon} onClick={() => openPopover(rules)}>
+						Show Rule
+					</Button>
+					<Button icon={PlusCircleIcon} variant="primary" onClick={() => setIsAddRuleModalOpen(true)}>
+						Add Rule
+					</Button>
+				</Space>
 			</IndexTable.Cell>
 		</IndexTable.Row>
 	));
@@ -221,10 +235,18 @@ export default function ProductsPage() {
 						{isOpenModal && (
 							<AddProductModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} onSubmit={handleProductSubmit} />
 						)}
+
+						{isAddRuleModalOpen && (
+							<AddRuleModal
+								isOpen={isAddRuleModalOpen}
+								onClose={() => setIsAddRuleModalOpen(false)}
+								onSubmit={handleAddRuleSubmit}
+							/>
+						)}
 					</div>
 
 					{popoverActive && (
-						<Popover active={popoverActive} activator={<Button>Add Rule</Button>} onClose={() => setPopoverActive(false)}>
+						<Popover active={popoverActive} activator={<Button>Show Rule</Button>} onClose={() => setPopoverActive(false)}>
 							<Card>
 								<Text as="span">Rule Details: {selectedProductRules}</Text>
 							</Card>
