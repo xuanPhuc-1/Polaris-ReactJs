@@ -31,6 +31,11 @@ const myMenuList = [
 		icon: "TableOutlined",
 		title: "Products",
 		path: "/products"
+	},
+	{
+		icon: "SettingOutlined",
+		title: "Settings",
+		path: "/settings"
 	}
 ];
 
