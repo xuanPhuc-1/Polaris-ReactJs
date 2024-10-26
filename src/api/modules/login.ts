@@ -20,7 +20,22 @@ export const getAuthorButtons = () => {
 	return http.get<Login.ResAuthButtons>(PORT1 + `/auth/buttons`);
 };
 
-// * 获取菜单列表
+// * Menu List Hardcoded Data
+const myMenuList = [
+	{
+		icon: "HomeOutlined",
+		title: "Dashboard",
+		path: "/dashboard"
+	},
+	{
+		icon: "TableOutlined",
+		title: "Products",
+		path: "/products"
+	}
+];
+
+// * Function to Get Menu List
 export const getMenuList = () => {
-	return http.get<Menu.MenuOptions[]>(PORT1 + `/menu/list`);
+	// Return data wrapped in an object to match expected structure
+	return Promise.resolve({ data: myMenuList });
 };

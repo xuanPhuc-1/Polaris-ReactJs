@@ -73,6 +73,7 @@ const LayoutMenu = (props: any) => {
 		setLoading(true);
 		try {
 			const { data } = await getMenuList();
+			console.log("data");
 			console.log(data);
 			if (!data) return;
 			setMenuList(deepLoopFloat(data));
