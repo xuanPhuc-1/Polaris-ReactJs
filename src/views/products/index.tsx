@@ -165,7 +165,7 @@ export default function ProductsPage() {
 					>
 						<TitleBar title="Products" />
 						<Button variant="primary" onClick={() => setIsOpenModal(true)}>
-							Generate a product
+							Add product
 						</Button>
 					</div>
 					<div style={{ marginBottom: "20px" }}>
