@@ -18,7 +18,7 @@ const LoginForm = (props: any) => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState<boolean>(false);
 
-	// 登录
+	// Login
 	const onFinish = async (loginForm: Login.ReqLoginForm) => {
 		try {
 			setLoading(true);
@@ -26,7 +26,7 @@ const LoginForm = (props: any) => {
 			const { data } = await loginApi(loginForm);
 			setToken(data?.access_token);
 			setTabsList([]);
-			message.success("登录成功！");
+			message.success("Login successful!");
 			navigate(HOME_URL);
 		} finally {
 			setLoading(false);
@@ -48,11 +48,11 @@ const LoginForm = (props: any) => {
 			size="large"
 			autoComplete="off"
 		>
-			<Form.Item name="username" rules={[{ required: true, message: "请输入用户名" }]}>
-				<Input placeholder="用户名：admin / user" prefix={<UserOutlined />} />
+			<Form.Item name="username" rules={[{ required: true, message: "Please enter username" }]}>
+				<Input placeholder="Username: admin / user" prefix={<UserOutlined />} />
 			</Form.Item>
-			<Form.Item name="password" rules={[{ required: true, message: "请输入密码" }]}>
-				<Input.Password autoComplete="new-password" placeholder="密码：123456" prefix={<LockOutlined />} />
+			<Form.Item name="password" rules={[{ required: true, message: "Please enter password" }]}>
+				<Input.Password autoComplete="new-password" placeholder="Password: 123456" prefix={<LockOutlined />} />
 			</Form.Item>
 			<Form.Item className="login-btn">
 				<Button

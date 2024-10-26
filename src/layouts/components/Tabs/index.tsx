@@ -23,12 +23,12 @@ const LayoutTabs = (props: any) => {
 		addTabs();
 	}, [pathname]);
 
-	// click tabs
+	// Click on a tab
 	const clickTabs = (path: string) => {
 		navigate(path);
 	};
 
-	// add tabs
+	// Add a tab
 	const addTabs = () => {
 		const route = searchRoute(pathname, routerArray);
 		let newTabsList = JSON.parse(JSON.stringify(tabsList));
@@ -39,7 +39,7 @@ const LayoutTabs = (props: any) => {
 		setActiveValue(pathname);
 	};
 
-	// delete tabs
+	// Delete a tab
 	const delTabs = (tabPath?: string) => {
 		if (tabPath === HOME_URL) return;
 		if (pathname === tabPath) {
@@ -50,7 +50,7 @@ const LayoutTabs = (props: any) => {
 				navigate(nextTab.path);
 			});
 		}
-		message.success("你删除了Tabs标签 😆😆😆");
+		message.success("You deleted a tab 😆😆😆");
 		setTabsList(tabsList.filter((item: Menu.MenuOptions) => item.path !== tabPath));
 	};
 

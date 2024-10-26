@@ -19,17 +19,17 @@ const AvatarIcon = (props: any) => {
 	const passRef = useRef<ModalProps>(null);
 	const infoRef = useRef<ModalProps>(null);
 
-	// 退出登录
+	// Logout
 	const logout = () => {
 		Modal.confirm({
-			title: "温馨提示 🧡",
+			title: "Friendly Reminder 🧡",
 			icon: <ExclamationCircleOutlined />,
-			content: "是否确认退出登录？",
-			okText: "确认",
-			cancelText: "取消",
+			content: "Are you sure you want to log out?",
+			okText: "Confirm",
+			cancelText: "Cancel",
 			onOk: () => {
 				setToken("");
-				message.success("退出登录成功！");
+				message.success("Successfully logged out!");
 				navigate("/login");
 			}
 		});
@@ -41,17 +41,17 @@ const AvatarIcon = (props: any) => {
 			items={[
 				{
 					key: "1",
-					label: <span className="dropdown-item">首页</span>,
+					label: <span className="dropdown-item">Home</span>,
 					onClick: () => navigate(HOME_URL)
 				},
 				{
 					key: "2",
-					label: <span className="dropdown-item">个人信息</span>,
+					label: <span className="dropdown-item">Profile Info</span>,
 					onClick: () => infoRef.current!.showModal({ name: 11 })
 				},
 				{
 					key: "3",
-					label: <span className="dropdown-item">修改密码</span>,
+					label: <span className="dropdown-item">Change Password</span>,
 					onClick: () => passRef.current!.showModal({ name: 11 })
 				},
 				{
@@ -59,7 +59,7 @@ const AvatarIcon = (props: any) => {
 				},
 				{
 					key: "4",
-					label: <span className="dropdown-item">退出登录</span>,
+					label: <span className="dropdown-item">Log Out</span>,
 					onClick: logout
 				}
 			]}
