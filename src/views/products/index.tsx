@@ -19,6 +19,7 @@ import { faker } from "@faker-js/faker";
 import enTranslations from "@shopify/polaris/locales/en.json";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import type { Product } from "@/api/interface/product";
+import AddProductModal from "./AddProductForm";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -33,6 +34,7 @@ export default function ProductsPage() {
 	const [itemsPerPage, setItemsPerPage] = useState(5); // State cho số item mỗi trang
 	const [filterTitle, setFilterTitle] = useState("");
 	const [filterStatus, setFilterStatus] = useState("All");
+	const [isOpenModal, setIsOpenModal] = useState(false);
 
 	const fetchProducts = async () => {
 		try {
@@ -96,6 +98,11 @@ export default function ProductsPage() {
 		plural: "products"
 	};
 
+	const handleProductSubmit = (productData: any) => {
+		console.log("Product Data:", productData);
+		setIsOpenModal(false);
+	};
+
 	const { selectedResources, allResourcesSelected, handleSelectionChange } = useIndexResourceState(products);
 
 	const rowMarkup = currentProducts.map(({ id, product, rules, lastUpdate, status, image }, index) => (
@@ -143,7 +150,7 @@ export default function ProductsPage() {
 						}}
 					>
 						<TitleBar title="Products" />
-						<Button variant="primary" onClick={() => console.log("Generate product clicked")}>
+						<Button variant="primary" onClick={() => setIsOpenModal(true)}>
 							Generate a product
 						</Button>
 					</div>
@@ -211,6 +218,9 @@ export default function ProductsPage() {
 							onPrevious={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
 							onNext={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
 						/>
+						{isOpenModal && (
+							<AddProductModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} onSubmit={handleProductSubmit} />
+						)}
 					</div>
 
 					{popoverActive && (
