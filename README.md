@@ -29,8 +29,8 @@
 
 1. **Clone repo**:
    ```bash
-   git clone [URL của repo]
-   cd [Tên thư mục]
+   git clone https://github.com/xuanPhuc-1/Polaris-ReactJs.git
+   cd Polaris-ReactJs
    ```
 2. **Cài đặt các gói phụ thuộc**:
    ```bash
