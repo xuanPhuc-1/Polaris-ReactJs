@@ -125,9 +125,10 @@ export default function ProductsPage() {
 						borderRadius: "5px"
 					}}
 				>
-					<img src={image} alt={product} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+					<img src={image} alt={product} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
 				</div>
 			</IndexTable.Cell>
+
 			<IndexTable.Cell>
 				<Text variant="bodyMd" fontWeight="bold" as="span">
 					{product}
