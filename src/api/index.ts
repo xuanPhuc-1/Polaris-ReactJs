@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } f
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/serviceLoading";
 import { ResultData } from "@/api/interface";
 import { ResultEnum } from "@/enums/httpEnum";
-import { checkStatus } from "./helper/checkStatus";
+// import { checkStatus } from "./helper/checkStatus";
 import { AxiosCanceler } from "./helper/axiosCancel";
 import { setToken } from "@/redux/modules/global/action";
 import { message } from "antd";
@@ -71,19 +71,17 @@ class RequestHttp {
 				}
 				// * 成功请求（在页面上除非特殊情况，否则不用处理失败逻辑）
 				return data;
-			},
-			async (error: AxiosError) => {
-				const { response } = error;
-				NProgress.done();
-				tryHideFullScreenLoading();
-				// 请求超时单独判断，请求超时没有 response
-				if (error.message.indexOf("timeout") !== -1) message.error("请求超时，请稍后再试");
-				// 根据响应的错误状态码，做不同的处理
-				if (response) checkStatus(response.status);
-				// 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面
-				if (!window.navigator.onLine) window.location.hash = "/500";
-				return Promise.reject(error);
 			}
+			// async (error: AxiosError) => {
+			// 	const { response } = error;
+			// 	NProgress.done();
+			// 	tryHideFullScreenLoading();
+			// 	// 根据响应的错误状态码，做不同的处理
+			// 	if (response) checkStatus(response.status);
+			// 	// 服务器结果都没有返回(可能服务器错误可能客户端断网) 断网处理:可以跳转到断网页面
+			// 	if (!window.navigator.onLine) window.location.hash = "/500";
+			// 	return Promise.reject(error);
+			// }
 		);
 	}
 

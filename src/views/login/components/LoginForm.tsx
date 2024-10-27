@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Button, Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Login } from "@/api/interface";
-import { loginApi } from "@/api/modules/login";
 import { HOME_URL } from "@/config/config";
 import { connect } from "react-redux";
 import { setToken } from "@/redux/modules/global/action";
@@ -22,12 +21,29 @@ const LoginForm = (props: any) => {
 	const onFinish = async (loginForm: Login.ReqLoginForm) => {
 		try {
 			setLoading(true);
+
+			// Hardcode kiểm tra user_name và password
+			const validUsers = [
+				{ user_name: "admin", password: md5("123456") },
+				{ user_name: "user", password: md5("123456") }
+			];
+
+			// Hash password nhập vào
 			loginForm.password = md5(loginForm.password);
-			const { data } = await loginApi(loginForm);
-			setToken(data?.access_token);
-			setTabsList([]);
-			message.success("Login successful!");
-			navigate(HOME_URL);
+
+			// Kiểm tra nếu user hợp lệ
+			const user = validUsers.find(u => u.user_name === loginForm.username && u.password === loginForm.password);
+
+			if (user) {
+				// Cấp token tạm thời (giả lập)
+				const temporaryAccessToken = "temporary_access_token_example";
+				setToken(temporaryAccessToken);
+				setTabsList([]);
+				message.success("Login successful!");
+				navigate(HOME_URL);
+			} else {
+				message.error("Invalid username or password");
+			}
 		} finally {
 			setLoading(false);
 		}
