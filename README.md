@@ -18,7 +18,7 @@
 
 ### Giới thiệu
 
-Ứng dụng này được phát triển nhằm đáp ứng yêu cầu của bài kiểm tra đầu vào cho vị trí Frontend Developer. Ứng dụng có chức năng [miêu tả ngắn gọn chức năng chính], với giao diện dễ sử dụng và codebase chuẩn mực, dễ bảo trì.
+Dự án này là một ứng dụng demo Frontend, trong đó tôi sử dụng **Polaris** để xây dựng giao diện người dùng. Đây là lần đầu tiên tôi làm việc với Polaris, nên tôi đã dành thời gian nghiên cứu và học hỏi để tạo ra một ứng dụng đơn giản, dễ sử dụng, nhưng vẫn đảm bảo các chức năng yêu cầu. Hy vọng rằng ứng dụng này sẽ đáp ứng được các tiêu chí kỹ thuật và thiết kế.
 
 ### Yêu cầu hệ thống
 
