@@ -135,31 +135,39 @@ export default function DashboardPage() {
 		let filteredData: number[];
 		let filteredLabels: string[];
 
-		if (endDate > now || startDate < sevenDaysAgo || startDate > now) {
+		// Trường hợp startDate và endDate giống nhau (ví dụ: chọn "toDay")
+		if (startDate.getTime() === endDate.getTime()) {
+			// Kiểm tra nếu ngày đó là hôm nay hoặc trong 7 ngày qua
+			if (startDate >= sevenDaysAgo && startDate <= now) {
+				const dayIndex = 7 - Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+				filteredData = [subscriptionData[dayIndex]];
+				filteredLabels = [labelsData[dayIndex]];
+			} else {
+				// Ngày không nằm trong 7 ngày gần nhất
+				filteredData = [];
+				filteredLabels = [];
+			}
+		} else if (endDate > now || startDate < sevenDaysAgo || startDate > now) {
 			// Lấy toàn bộ 7 ngày gần nhất
 			filteredData = subscriptionData.slice(-7);
 			filteredLabels = labelsData.slice(-7);
 		} else {
-			// Tính toán khoảng cách tính theo ngày từ `now` đến `startDate` và `endDate`
+			// Tính toán khoảng cách từ `now` đến `startDate` và `endDate`
 			const daysFromNowToEnd = Math.ceil((now.getTime() - endDate.getTime()) / (1000 * 3600 * 24));
 			const daysFromNowToStart = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
-			// Sử dụng các chỉ số này để lấy dữ liệu và nhãn theo khoảng thời gian `>= startDate` và `<= endDate`
 			filteredData = subscriptionData
 				.slice(-daysFromNowToStart - 1, -daysFromNowToEnd)
-				.filter(value => value !== null && value !== undefined); // Loại bỏ các giá trị null hoặc undefined
+				.filter(value => value !== null && value !== undefined);
 
 			filteredLabels = labelsData.slice(-daysFromNowToStart - 1, -daysFromNowToEnd);
 		}
 
-		// Cập nhật dữ liệu và nhãn cho LineChart
+		// Cập nhật dữ liệu cho LineChart
 		setLineChartFilteredData(filteredData);
-
-		// Tính tổng số đăng ký trong khoảng thời gian đã chọn
 		const total: number = filteredData.reduce((acc, val) => acc + val, 0);
 		setTotalSubscriptions(total);
 
-		// Cập nhật `lineData` để trục x khớp với dữ liệu đã lọc
 		setLineData({
 			...originalLineData,
 			labels: filteredLabels,
