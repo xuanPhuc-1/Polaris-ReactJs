@@ -127,16 +127,14 @@ export default function DashboardPage() {
 
 	const filterSubscriptions = (startDate: Date, endDate: Date): void => {
 		const now = new Date();
-		const sevenDaysAgoFromNow = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
-
 		const subscriptionData: number[] = originalLineData.datasets[0].data;
 		const labelsData: string[] = originalLineData.labels;
 
 		let filteredData: number[];
 		let filteredLabels: string[];
 
-		// Kiểm tra nếu `endDate` vượt quá `now` hoặc `startDate` trước `sevenDaysAgoFromNow`
-		if (endDate > now && startDate < sevenDaysAgoFromNow) {
+		// Kiểm tra nếu `endDate` vượt quá `now` hoặc `startDate` trước `Now`
+		if (endDate > now && startDate <= now) {
 			// Lấy toàn bộ 7 ngày gần nhất
 			filteredData = subscriptionData.slice(-7);
 			filteredLabels = labelsData.slice(-7);
