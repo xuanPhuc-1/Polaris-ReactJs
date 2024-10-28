@@ -25,22 +25,6 @@ export default function DashboardPage() {
 	const [year, setYear] = useState<number>(new Date().getFullYear());
 	const [totalSubscriptions, setTotalSubscriptions] = useState<number>(0);
 	const [totalRevenue, setTotalRevenue] = useState<number>(0);
-
-	// State để lưu trữ dữ liệu đã lọc
-	const [lineChartFilteredData, setLineChartFilteredData] = useState<number[]>([25, 30, 45, 60, 55, 70, 80]);
-	const [columnChartFilteredData, setColumnChartFilteredData] = useState<number[]>([
-		5000, 6000, 5500, 7000, 6500, 7200, 7500, 8000, 7800, 8300, 8500, 9000
-	]);
-
-	const handleDateChange = (value: DateRange): void => {
-		setSelectedDates(value);
-	};
-
-	const handleMonthChange = (month: number, year: number): void => {
-		setMonth(month);
-		setYear(year);
-	};
-
 	// Dữ liệu giả lập cho LineChart (subscriptions)
 	const originalLineData = {
 		labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
@@ -53,16 +37,21 @@ export default function DashboardPage() {
 			}
 		]
 	};
+	const [lineData, setLineData] = useState(originalLineData);
 
-	const lineData = {
-		...originalLineData,
-		labels: originalLineData.labels.slice(-lineChartFilteredData.length),
-		datasets: [
-			{
-				...originalLineData.datasets[0],
-				data: lineChartFilteredData
-			}
-		]
+	// State để lưu trữ dữ liệu đã lọc
+	const [, setLineChartFilteredData] = useState<number[]>([25, 30, 45, 60, 55, 70, 80]);
+	const [columnChartFilteredData, setColumnChartFilteredData] = useState<number[]>([
+		5000, 6000, 5500, 7000, 6500, 7200, 7500, 8000, 7800, 8300, 8500, 9000
+	]);
+
+	const handleDateChange = (value: DateRange): void => {
+		setSelectedDates(value);
+	};
+
+	const handleMonthChange = (month: number, year: number): void => {
+		setMonth(month);
+		setYear(year);
 	};
 
 	// Dữ liệu giả lập cho ColumnChart (revenue)
@@ -137,17 +126,52 @@ export default function DashboardPage() {
 	};
 
 	const filterSubscriptions = (startDate: Date, endDate: Date): void => {
+		const now = new Date();
+		const sevenDaysAgoFromNow = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7);
+
 		const subscriptionData: number[] = originalLineData.datasets[0].data;
+		const labelsData: string[] = originalLineData.labels;
 
-		const daysInRange = Math.min(7, Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)));
+		let filteredData: number[];
+		let filteredLabels: string[];
 
-		// Tạo mảng lọc subscriptions từ ngày hiện tại, ngược về ngày đã chọn
-		const filteredData = subscriptionData.slice(-daysInRange).filter(value => value !== null && value !== undefined); // Loại bỏ các giá trị null hoặc undefined
+		// Kiểm tra nếu `endDate` vượt quá `now` hoặc `startDate` trước `sevenDaysAgoFromNow`
+		if (endDate > now && startDate < sevenDaysAgoFromNow) {
+			// Lấy toàn bộ 7 ngày gần nhất
+			filteredData = subscriptionData.slice(-7);
+			filteredLabels = labelsData.slice(-7);
+		} else {
+			// Tính số ngày từ `now` đến `startDate` và `endDate` để xác định vị trí trong mảng
+			const daysFromNowToEnd = Math.ceil((now.getTime() - endDate.getTime()) / (1000 * 3600 * 24));
+			const daysFromNowToStart = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
+			// Lọc dữ liệu từ chỉ số bắt đầu đến chỉ số kết thúc trong mảng
+			filteredData = subscriptionData
+				.slice(-daysFromNowToStart, -daysFromNowToEnd)
+				.filter(value => value !== null && value !== undefined); // Loại bỏ các giá trị null hoặc undefined
+
+			// Lọc nhãn `labels` theo khoảng thời gian đã chọn
+			filteredLabels = labelsData.slice(-daysFromNowToStart, -daysFromNowToEnd);
+		}
+
+		// Cập nhật dữ liệu và nhãn cho LineChart
 		setLineChartFilteredData(filteredData);
 
+		// Tính tổng số đăng ký trong khoảng thời gian đã chọn
 		const total: number = filteredData.reduce((acc, val) => acc + val, 0);
 		setTotalSubscriptions(total);
+
+		// Cập nhật `lineData` để trục x khớp với dữ liệu đã lọc
+		setLineData({
+			...originalLineData,
+			labels: filteredLabels,
+			datasets: [
+				{
+					...originalLineData.datasets[0],
+					data: filteredData
+				}
+			]
+		});
 	};
 
 	// Hàm lọc cho ColumnChart (Revenue)
