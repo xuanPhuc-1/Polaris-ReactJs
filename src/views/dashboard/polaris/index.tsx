@@ -133,23 +133,22 @@ export default function DashboardPage() {
 		let filteredData: number[];
 		let filteredLabels: string[];
 
-		// Kiểm tra nếu `endDate` vượt quá `now` hoặc `startDate` trước `Now`
+		// Kiểm tra nếu `endDate` vượt quá `now` và `startDate` nằm trong khoảng cho phép (<= `now`)
 		if (endDate > now && startDate <= now) {
 			// Lấy toàn bộ 7 ngày gần nhất
 			filteredData = subscriptionData.slice(-7);
 			filteredLabels = labelsData.slice(-7);
 		} else {
-			// Tính số ngày từ `now` đến `startDate` và `endDate` để xác định vị trí trong mảng
+			// Tính toán khoảng cách tính theo ngày từ `now` đến `startDate` và `endDate`
 			const daysFromNowToEnd = Math.ceil((now.getTime() - endDate.getTime()) / (1000 * 3600 * 24));
 			const daysFromNowToStart = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
 
-			// Lọc dữ liệu từ chỉ số bắt đầu đến chỉ số kết thúc trong mảng
+			// Sử dụng các chỉ số này để lấy dữ liệu và nhãn theo khoảng thời gian `>= startDate` và `<= endDate`
 			filteredData = subscriptionData
-				.slice(-daysFromNowToStart, -daysFromNowToEnd)
+				.slice(-daysFromNowToStart - 1, -daysFromNowToEnd)
 				.filter(value => value !== null && value !== undefined); // Loại bỏ các giá trị null hoặc undefined
 
-			// Lọc nhãn `labels` theo khoảng thời gian đã chọn
-			filteredLabels = labelsData.slice(-daysFromNowToStart, -daysFromNowToEnd);
+			filteredLabels = labelsData.slice(-daysFromNowToStart - 1, -daysFromNowToEnd);
 		}
 
 		// Cập nhật dữ liệu và nhãn cho LineChart
