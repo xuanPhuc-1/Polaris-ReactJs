@@ -129,12 +129,13 @@ export default function DashboardPage() {
 		const now = new Date();
 		const subscriptionData: number[] = originalLineData.datasets[0].data;
 		const labelsData: string[] = originalLineData.labels;
+		const sevenDaysAgo = new Date(now);
+		sevenDaysAgo.setDate(now.getDate() - 7);
 
 		let filteredData: number[];
 		let filteredLabels: string[];
 
-		// Kiểm tra nếu `endDate` vượt quá `now` và `startDate` nằm trong khoảng cho phép (<= `now`)
-		if (endDate > now && startDate <= now) {
+		if (endDate > now || startDate < sevenDaysAgo || startDate > now) {
 			// Lấy toàn bộ 7 ngày gần nhất
 			filteredData = subscriptionData.slice(-7);
 			filteredLabels = labelsData.slice(-7);
